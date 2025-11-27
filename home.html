@@ -1,0 +1,1802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRO - Manifested Dance Challenge 2025</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --pro-bg: #0a0a0a;
+            --pro-card: #111111;
+            --pro-accent: #ff0033;
+            --pro-accent-dark: #cc0029;
+            --pro-gold: #ffd700;
+            --pro-silver: #c0c0c0;
+            --pro-bronze: #cd7f32;
+            --pro-text: #ffffff;
+            --pro-text-secondary: #b0b0b0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--pro-bg);
+            color: var(--pro-text);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .pro-container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header */
+        .pro-header {
+            background: linear-gradient(135deg, var(--pro-accent) 0%, var(--pro-accent-dark) 100%);
+            padding: 1.5rem 0;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .pro-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--pro-gold), transparent);
+        }
+
+        /* Countdown */
+        .pro-countdown {
+            background: var(--pro-card);
+            border: 1px solid rgba(255, 0, 51, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.8rem;
+            text-align: center;
+        }
+
+        .countdown-item {
+            padding: 1rem;
+            background: rgba(255, 0, 51, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 0, 51, 0.2);
+        }
+
+        .countdown-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--pro-gold);
+            line-height: 1;
+            margin-bottom: 0.3rem;
+        }
+
+        .countdown-label {
+            font-size: 0.75rem;
+            color: var(--pro-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Top 3 Cards */
+        .top-performers-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .winner-card {
+            background: var(--pro-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .winner-card.gold {
+            border-color: var(--pro-gold);
+            background: linear-gradient(135deg, var(--pro-card) 0%, rgba(255, 215, 0, 0.1) 100%);
+        }
+
+        .winner-card.silver {
+            border-color: var(--pro-silver);
+            background: linear-gradient(135deg, var(--pro-card) 0%, rgba(192, 192, 192, 0.1) 100%);
+        }
+
+        .winner-card.bronze {
+            border-color: var(--pro-bronze);
+            background: linear-gradient(135deg, var(--pro-card) 0%, rgba(205, 127, 50, 0.1) 100%);
+        }
+
+        .winner-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 0, 51, 0.2);
+        }
+
+        .winner-badge {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin: 0 auto 1rem;
+            position: relative;
+        }
+
+        .winner-badge.gold {
+            background: linear-gradient(135deg, var(--pro-gold), #ff9900);
+            color: #000;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .winner-badge.silver {
+            background: linear-gradient(135deg, var(--pro-silver), #a0a0a0);
+            color: #000;
+        }
+
+        .winner-badge.bronze {
+            background: linear-gradient(135deg, var(--pro-bronze), #a56a2b);
+            color: #000;
+        }
+
+        .winner-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.8rem;
+            margin: 1rem 0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--pro-gold);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--pro-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Search & Filters */
+        .pro-search {
+            background: var(--pro-card);
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 0, 51, 0.3);
+        }
+
+        .search-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .pro-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 0, 51, 0.3);
+            color: var(--pro-text);
+            border-radius: 8px;
+            padding: 0.7rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .pro-input:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--pro-accent);
+            box-shadow: 0 0 0 2px rgba(255, 0, 51, 0.2);
+            outline: none;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 0, 51, 0.3);
+            color: var(--pro-text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-tab.active {
+            background: var(--pro-accent);
+            border-color: var(--pro-accent);
+            color: white;
+        }
+
+        /* Leaderboard */
+        .pro-leaderboard {
+            background: var(--pro-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 0, 51, 0.3);
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard-table th {
+            background: rgba(255, 0, 51, 0.1);
+            color: var(--pro-gold);
+            padding: 0.8rem;
+            text-align: left;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.75rem;
+            border-bottom: 2px solid var(--pro-accent);
+        }
+
+        .leaderboard-table td {
+            padding: 0.8rem;
+            border-bottom: 1px solid rgba(255, 0, 51, 0.1);
+            vertical-align: middle;
+        }
+
+        .leaderboard-table tr:hover td {
+            background: rgba(255, 0, 51, 0.05);
+        }
+
+        .rank-cell {
+            font-weight: 800;
+            color: var(--pro-gold);
+            text-align: center;
+        }
+
+        .score-cell {
+            font-weight: 800;
+            color: var(--pro-gold);
+            text-align: center;
+        }
+
+        /* Pagination */
+        .pro-pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 1.5rem;
+            gap: 0.8rem;
+        }
+
+        .page-info {
+            color: var(--pro-text-secondary);
+            font-size: 0.8rem;
+        }
+
+        /* Buttons */
+        .pro-btn {
+            background: linear-gradient(135deg, var(--pro-accent), var(--pro-accent-dark));
+            border: none;
+            color: white;
+            padding: 0.7rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .pro-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 0, 51, 0.4);
+        }
+
+        .pro-btn-outline {
+            background: transparent;
+            border: 1px solid var(--pro-accent);
+            color: var(--pro-accent);
+        }
+
+        .pro-btn-outline:hover {
+            background: var(--pro-accent);
+            color: white;
+        }
+
+        .pro-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Analytics Modal */
+        .pro-modal {
+            background: var(--pro-card);
+            border: 1px solid rgba(255, 0, 51, 0.3);
+            border-radius: 15px;
+        }
+
+        .pro-modal-header {
+            background: rgba(255, 0, 51, 0.1);
+            border-bottom: 1px solid rgba(255, 0, 51, 0.3);
+            padding: 1.2rem;
+        }
+
+        .pro-modal-body {
+            padding: 1.5rem;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .chart-container {
+            height: 250px;
+            position: relative;
+        }
+
+        .engagement-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.8rem;
+            margin: 1rem 0;
+        }
+
+        .engagement-card {
+            background: rgba(255, 0, 51, 0.1);
+            border: 1px solid rgba(255, 0, 51, 0.3);
+            border-radius: 8px;
+            padding: 0.8rem;
+            text-align: center;
+        }
+
+        /* Comments & Likes Section */
+        .engagement-details {
+            margin-top: 1.5rem;
+        }
+
+        .engagement-tabs {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .engagement-content {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .comment-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 0, 51, 0.1);
+            border-radius: 8px;
+            padding: 0.8rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .comment-author {
+            font-weight: bold;
+            color: var(--pro-gold);
+            margin-bottom: 0.4rem;
+            font-size: 0.9rem;
+        }
+
+        .comment-text {
+            margin: 0.4rem 0;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            font-size: 0.85rem;
+        }
+
+        .comment-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--pro-text-secondary);
+            margin-top: 0.4rem;
+        }
+
+        .comment-likes {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .comment-replies {
+            margin-top: 0.6rem;
+            padding-left: 0.8rem;
+            border-left: 2px solid rgba(255, 0, 51, 0.3);
+        }
+
+        .reply-item {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 6px;
+            padding: 0.6rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .load-more-btn {
+            width: 100%;
+            margin-top: 0.8rem;
+        }
+
+        /* Loading */
+        .pro-loading {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 0, 51, 0.3);
+            border-top: 3px solid var(--pro-accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 0.8rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Status */
+        .pro-status {
+            font-size: 0.75rem;
+            color: var(--pro-text-secondary);
+            text-align: center;
+            margin-top: 0.8rem;
+        }
+
+        /* Mobile-Specific Styles */
+        .mobile-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            margin: 1rem 0;
+        }
+
+        .mobile-stat-card {
+            background: rgba(255, 0, 51, 0.1);
+            border: 1px solid rgba(255, 0, 51, 0.3);
+            border-radius: 8px;
+            padding: 0.8rem;
+            text-align: center;
+        }
+
+        .mobile-chart-container {
+            height: 200px;
+            position: relative;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .top-performers-grid {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+            
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .pro-container {
+                padding: 0 10px;
+            }
+
+            .pro-header {
+                padding: 1rem 0;
+                margin-bottom: 1rem;
+            }
+
+            .pro-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .countdown-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+            }
+
+            .countdown-item {
+                padding: 0.8rem;
+            }
+
+            .countdown-value {
+                font-size: 1.5rem;
+            }
+
+            .countdown-label {
+                font-size: 0.7rem;
+            }
+
+            .search-row {
+                grid-template-columns: 1fr;
+                gap: 0.6rem;
+            }
+
+            .winner-stats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.6rem;
+            }
+
+            .leaderboard-table {
+                font-size: 0.75rem;
+            }
+            
+            .leaderboard-table th,
+            .leaderboard-table td {
+                padding: 0.6rem 0.4rem;
+            }
+
+            /* Mobile-optimized table */
+            .leaderboard-table thead {
+                display: none;
+            }
+
+            .leaderboard-table tr {
+                display: block;
+                margin-bottom: 1rem;
+                background: var(--pro-card);
+                border: 1px solid rgba(255, 0, 51, 0.2);
+                border-radius: 8px;
+                padding: 0.8rem;
+            }
+
+            .leaderboard-table td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.4rem 0;
+                border: none;
+                border-bottom: 1px solid rgba(255, 0, 51, 0.1);
+            }
+
+            .leaderboard-table td:last-child {
+                border-bottom: none;
+            }
+
+            .leaderboard-table td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                color: var(--pro-gold);
+                text-transform: uppercase;
+                font-size: 0.7rem;
+                margin-right: 0.5rem;
+            }
+
+            .rank-cell, .score-cell {
+                text-align: right;
+            }
+
+            /* Analytics Modal Mobile Optimizations */
+            .pro-modal .modal-dialog {
+                margin: 0.5rem;
+            }
+
+            .pro-modal-body {
+                padding: 1rem;
+            }
+
+            .engagement-stats {
+                grid-template-columns: 1fr;
+                gap: 0.6rem;
+            }
+
+            .chart-container {
+                height: 200px;
+            }
+
+            .engagement-content {
+                max-height: 300px;
+            }
+
+            .comment-item {
+                padding: 0.6rem;
+            }
+
+            .comment-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.3rem;
+            }
+
+            .comment-replies {
+                padding-left: 0.6rem;
+            }
+
+            .pro-pagination {
+                flex-direction: column;
+                gap: 0.6rem;
+            }
+
+            .page-info {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .pro-container {
+                padding: 0 8px;
+            }
+
+            .pro-header h1 {
+                font-size: 1.3rem;
+            }
+
+            .countdown-value {
+                font-size: 1.2rem;
+            }
+
+            .winner-card {
+                padding: 1rem;
+            }
+
+            .winner-badge {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+
+            .filter-tabs {
+                justify-content: center;
+            }
+
+            .filter-tab {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.7rem;
+            }
+
+            .pro-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.8rem;
+            }
+
+            .analytics-grid {
+                gap: 1rem;
+            }
+
+            .chart-container {
+                height: 180px;
+            }
+
+            .engagement-content {
+                max-height: 250px;
+            }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 360px) {
+            .pro-header h1 {
+                font-size: 1.1rem;
+            }
+
+            .countdown-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .winner-stats {
+                grid-template-columns: 1fr;
+                gap: 0.4rem;
+            }
+
+            .engagement-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .filter-tab {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* Touch-friendly improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .winner-card:hover {
+                transform: none;
+            }
+
+            .pro-btn:hover {
+                transform: none;
+                box-shadow: none;
+            }
+
+            .filter-tab {
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .pro-btn {
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        /* High DPI screens */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .winner-badge {
+                image-rendering: -webkit-optimize-contrast;
+                image-rendering: crisp-edges;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            .pro-modal {
+                background: var(--pro-card);
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .pro-btn, .filter-tabs, .pro-pagination {
+                display: none;
+            }
+            
+            .pro-header {
+                background: #000 !important;
+                color: #000 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="pro-container py-3">
+        <!-- Header -->
+        <header class="pro-header">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h1 class="display-5 fw-bold">MANIFESTED DANCE CHALLENGE 2025</h1>
+                        <p class="mb-0 opacity-75">Professional Competition Analytics Dashboard</p>
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        <button class="pro-btn" id="refreshDataBtn">
+                            <i class="fas fa-sync-alt me-2"></i>REFRESH DATA
+                        </button>
+                        <div class="pro-status" id="lastUpdated">Last updated: Never</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="container">
+            <!-- Countdown -->
+            <div class="pro-countdown">
+                <h3 class="mb-3"><i class="fas fa-clock me-2"></i>COMPETITION COUNTDOWN</h3>
+                <div class="countdown-grid">
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="days">00</div>
+                        <div class="countdown-label">Days</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="hours">00</div>
+                        <div class="countdown-label">Hours</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="minutes">00</div>
+                        <div class="countdown-label">Minutes</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="seconds">00</div>
+                        <div class="countdown-label">Seconds</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search & Filters -->
+            <div class="pro-search">
+                <h5 class="mb-3"><i class="fas fa-search me-2"></i>SEARCH & FILTER</h5>
+                <div class="search-row">
+                    <input type="text" id="searchInput" class="pro-input" placeholder="Search dance challenge videos...">
+                    <select id="sortSelect" class="pro-input">
+                        <option value="score">Sort by Score</option>
+                        <option value="views">Sort by Views</option>
+                        <option value="likes">Sort by Likes</option>
+                        <option value="comments">Sort by Comments</option>
+                        <option value="engagement">Sort by Engagement</option>
+                        <option value="date">Sort by Date</option>
+                    </select>
+                </div>
+                <div class="filter-tabs">
+                    <div class="filter-tab active" data-filter="all">ALL SHORTS</div>
+                    <div class="filter-tab" data-filter="top3">TOP 3</div>
+                    <div class="filter-tab" data-filter="high-engagement">HIGH ENGAGEMENT</div>
+                    <div class="filter-tab" data-filter="recent">RECENT</div>
+                    <div class="filter-tab" data-filter="trending">TRENDING</div>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="pro-loading">
+                <div class="loading-spinner"></div>
+                <h4>LOADING PROFESSIONAL DATA</h4>
+                <p class="opacity-75">Fetching real-time analytics from YouTube</p>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div id="dashboardContent" style="display: none;">
+                <!-- Top 3 Performers -->
+                <div class="top-performers-grid" id="topVideos"></div>
+
+                <!-- Leaderboard -->
+                <div class="pro-leaderboard">
+                    <h3 class="mb-3"><i class="fas fa-trophy me-2"></i>LEADERBOARD</h3>
+                    <div class="table-responsive">
+                        <table class="leaderboard-table">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Video Title</th>
+                                    <th>Views</th>
+                                    <th>Likes</th>
+                                    <th>Comments</th>
+                                    <th>Engagement</th>
+                                    <th>Score</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allVideosTable"></tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="pro-pagination">
+                        <button class="pro-btn pro-btn-outline" id="prevPageBtn" disabled>
+                            <i class="fas fa-chevron-left me-1"></i> Previous
+                        </button>
+                        <span class="page-info" id="pageInfo">Page 1 of 1</span>
+                        <button class="pro-btn pro-btn-outline" id="nextPageBtn" disabled>
+                            Next <i class="fas fa-chevron-right ms-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="alert alert-danger text-center" style="display: none;">
+                <h4><i class="fas fa-exclamation-triangle me-2"></i>SYSTEM ERROR</h4>
+                <p id="errorMessage" class="mb-2"></p>
+                <button class="pro-btn mt-2" id="retryButton">RETRY CONNECTION</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analytics Modal -->
+    <div class="modal fade" id="videoAnalyticsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content pro-modal">
+                <div class="pro-modal-header">
+                    <h5 class="modal-title" id="analyticsModalTitle">PROFESSIONAL ANALYTICS</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="pro-modal-body" id="analyticsModalBody">
+                    <!-- Analytics content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Configuration
+        const YOUTUBE_API_KEY = 'AIzaSyD-2gRcBMBplIFPT9Jq3hpBc-lQjXcZepA';
+        const CHANNEL_ID = 'UCWNi_ws2zQSJ9k-OIc5Rf2A';
+        const YOUTUBE_API_BASE = 'https://www.googleapis.com/youtube/v3';
+        
+        // Competition dates
+        const COMPETITION_START = new Date('2025-11-23T00:00:00');
+        const COMPETITION_END = new Date('2025-12-29T23:59:59');
+
+        // Global variables
+        let videosData = [];
+        let filteredVideos = [];
+        let isLoading = false;
+        let currentFilter = 'all';
+        let countdownInterval;
+        let analyticsModal = null;
+        
+        // Pagination variables
+        let currentPage = 1;
+        const videosPerPage = 10;
+
+        // Comment pagination
+        let commentNextPageTokens = {};
+
+        // Track if app is initialized to prevent multiple initializations
+        let appInitialized = false;
+
+        // DOM Content Loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!appInitialized) {
+                initializeApp();
+                appInitialized = true;
+            }
+        });
+
+        // Initialize the application
+        function initializeApp() {
+            console.log('Initializing PRO Dance Challenge Dashboard...');
+            
+            // Initialize modal
+            analyticsModal = new bootstrap.Modal(document.getElementById('videoAnalyticsModal'));
+            
+            // Start countdown timer
+            startCountdown();
+            
+            // Initialize event listeners
+            initializeEventListeners();
+            
+            // Load data immediately
+            loadManifestedData();
+        }
+
+        // Initialize event listeners
+        function initializeEventListeners() {
+            console.log('Initializing event listeners...');
+            
+            const refreshBtn = document.getElementById('refreshDataBtn');
+            if (refreshBtn) {
+                // Remove any existing event listeners first
+                refreshBtn.replaceWith(refreshBtn.cloneNode(true));
+                document.getElementById('refreshDataBtn').addEventListener('click', handleRefreshClick);
+            }
+            
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    clearTimeout(this.searchTimeout);
+                    this.searchTimeout = setTimeout(() => handleSearch(), 300);
+                });
+            }
+            
+            const sortSelect = document.getElementById('sortSelect');
+            if (sortSelect) {
+                sortSelect.addEventListener('change', handleSort);
+            }
+            
+            // Filter tabs
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.getAttribute('data-filter');
+                    currentPage = 1; // Reset to first page when filter changes
+                    applyFilters();
+                });
+            });
+            
+            // Pagination buttons
+            document.getElementById('prevPageBtn').addEventListener('click', goToPrevPage);
+            document.getElementById('nextPageBtn').addEventListener('click', goToNextPage);
+            
+            // Retry button
+            document.getElementById('retryButton').addEventListener('click', handleRefreshClick);
+
+            // Handle window resize for mobile optimizations
+            window.addEventListener('resize', handleResize);
+        }
+
+        // Handle window resize
+        function handleResize() {
+            // Update table for mobile if needed
+            if (window.innerWidth <= 768) {
+                makeTableResponsive();
+            }
+        }
+
+        // Make table responsive for mobile
+        function makeTableResponsive() {
+            const table = document.querySelector('.leaderboard-table');
+            if (!table) return;
+
+            const headers = Array.from(table.querySelectorAll('th')).map(th => th.textContent);
+            const rows = table.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                cells.forEach((cell, index) => {
+                    if (headers[index]) {
+                        cell.setAttribute('data-label', headers[index]);
+                    }
+                });
+            });
+        }
+
+        // Handle refresh button click
+        function handleRefreshClick() {
+            console.log('Refresh button clicked');
+            if (!isLoading) {
+                loadManifestedData();
+            }
+        }
+
+        // YouTube API call function
+        async function youtubeAPI(endpoint, params) {
+            try {
+                const response = await fetch(`${YOUTUBE_API_BASE}${endpoint}?` + new URLSearchParams({
+                    ...params,
+                    key: YOUTUBE_API_KEY
+                }));
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || `HTTP error! status: ${response.status}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('YouTube API Error:', error);
+                throw error;
+            }
+        }
+
+        // Load data from YouTube API
+        async function loadManifestedData() {
+            if (isLoading) {
+                console.log('Already loading data, skipping...');
+                return;
+            }
+            
+            isLoading = true;
+            showLoadingState();
+            
+            try {
+                console.log('Fetching professional YouTube data...');
+                
+                // Get channel info
+                const channelData = await youtubeAPI('/channels', {
+                    part: 'snippet,statistics,contentDetails',
+                    id: CHANNEL_ID
+                });
+
+                if (!channelData.items || channelData.items.length === 0) {
+                    throw new Error('Professional channel not found');
+                }
+
+                const channel = channelData.items[0];
+                console.log('Professional channel loaded:', channel.snippet.title);
+
+                // Get uploads playlist ID
+                const uploadsPlaylistId = channel.contentDetails?.relatedPlaylists?.uploads;
+                if (!uploadsPlaylistId) {
+                    throw new Error('Could not find uploads playlist');
+                }
+
+                // Get videos from uploads playlist
+                let nextPageToken = null;
+                let allVideos = [];
+                
+                do {
+                    const playlistData = await youtubeAPI('/playlistItems', {
+                        part: 'snippet,contentDetails',
+                        playlistId: uploadsPlaylistId,
+                        maxResults: 50,
+                        pageToken: nextPageToken || ''
+                    });
+
+                    if (playlistData.items && playlistData.items.length > 0) {
+                        allVideos = allVideos.concat(playlistData.items);
+                    }
+                    
+                    nextPageToken = playlistData.nextPageToken;
+                } while (nextPageToken && allVideos.length < 100);
+
+                console.log(`Found ${allVideos.length} professional videos`);
+
+                // Get detailed statistics for each video (in batches of 50)
+                videosData = [];
+                if (allVideos.length > 0) {
+                    for (let i = 0; i < allVideos.length; i += 50) {
+                        const batch = allVideos.slice(i, i + 50);
+                        const videoIds = batch.map(item => item.contentDetails.videoId).join(',');
+                        
+                        const videosDetailsData = await youtubeAPI('/videos', {
+                            part: 'snippet,statistics,contentDetails',
+                            id: videoIds
+                        });
+
+                        if (videosDetailsData.items) {
+                            const batchVideos = videosDetailsData.items.map(video => {
+                                const views = parseInt(video.statistics?.viewCount || 0);
+                                const likes = parseInt(video.statistics?.likeCount || 0);
+                                const comments = parseInt(video.statistics?.commentCount || 0);
+                                const duration = video.contentDetails?.duration || '';
+                                const title = video.snippet.title.toLowerCase();
+                                
+                                // Detect Shorts and Dance Challenge content
+                                const isShort = duration === 'PT60S' || duration === 'PT59S' || 
+                                               (duration && duration.startsWith('PT') && 
+                                                parseInt(duration.replace('PT', '').replace('S', '')) <= 60);
+                                
+                                const isDanceChallenge = title.includes('dance') && 
+                                                        (title.includes('challenge') || 
+                                                         title.includes('competition') || 
+                                                         title.includes('battle'));
+                                
+                                return {
+                                    id: video.id,
+                                    title: video.snippet.title,
+                                    thumbnail: video.snippet.thumbnails?.medium?.url,
+                                    publishedAt: video.snippet.publishedAt,
+                                    views: views,
+                                    likes: likes,
+                                    comments: comments,
+                                    duration: duration,
+                                    isShort: isShort,
+                                    isDanceChallenge: isDanceChallenge,
+                                    engagementRate: views > 0 ? Math.round(((likes + comments) / views) * 100 * 100) / 100 : 0
+                                };
+                            });
+                            
+                            videosData = videosData.concat(batchVideos);
+                        }
+                        
+                        if (i + 50 < allVideos.length) {
+                            await new Promise(resolve => setTimeout(resolve, 100));
+                        }
+                    }
+                }
+                
+                // Filter only Dance Challenge Shorts videos
+                videosData = videosData.filter(video => video.isShort && video.isDanceChallenge);
+                console.log(`Found ${videosData.length} professional Dance Challenge Shorts`);
+                
+                // Calculate professional scores
+                calculateScores();
+                filteredVideos = [...videosData];
+                
+                // Update UI
+                applyFilters();
+                renderTopVideos();
+                updatePagination();
+                showDashboardContent();
+                
+                // Make table responsive if on mobile
+                if (window.innerWidth <= 768) {
+                    makeTableResponsive();
+                }
+                
+                // Update timestamp
+                document.getElementById('lastUpdated').textContent = 
+                    `Last updated: ${new Date().toLocaleTimeString()}`;
+                
+                console.log('Data loading completed successfully');
+                
+            } catch (error) {
+                console.error('Professional data error:', error);
+                showError(`Professional system error: ${error.message}`);
+            } finally {
+                isLoading = false;
+            }
+        }
+
+        // Show professional analytics
+        async function showVideoAnalytics(videoId) {
+            const video = videosData.find(v => v.id === videoId);
+            if (!video) return;
+
+            // Reset comment pagination for this video
+            commentNextPageTokens[videoId] = null;
+
+            // Update modal title
+            document.getElementById('analyticsModalTitle').textContent = `PRO ANALYTICS: ${video.title}`;
+            
+            // Check if mobile
+            const isMobile = window.innerWidth <= 768;
+            
+            // Create professional analytics content with mobile optimizations
+            const analyticsContent = `
+                <div class="analytics-grid">
+                    <div>
+                        <div class="${isMobile ? 'mobile-stats-grid' : 'engagement-stats'}">
+                            <div class="${isMobile ? 'mobile-stat-card' : 'engagement-card'}">
+                                <div class="stat-value">${formatNumber(video.views)}</div>
+                                <div class="stat-label">Views</div>
+                            </div>
+                            <div class="${isMobile ? 'mobile-stat-card' : 'engagement-card'}">
+                                <div class="stat-value">${formatNumber(video.likes)}</div>
+                                <div class="stat-label">Likes</div>
+                            </div>
+                            <div class="${isMobile ? 'mobile-stat-card' : 'engagement-card'}">
+                                <div class="stat-value">${formatNumber(video.comments)}</div>
+                                <div class="stat-label">Comments</div>
+                            </div>
+                        </div>
+                        
+                        <div class="${isMobile ? 'mobile-chart-container' : 'chart-container'}">
+                            <canvas id="performanceChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="${isMobile ? 'mobile-chart-container' : 'chart-container'}">
+                            <canvas id="engagementChart"></canvas>
+                        </div>
+                        
+                        <div class="engagement-details">
+                            <h6 class="mb-3">YOUTUBE COMMENTS</h6>
+                            <div class="engagement-content" id="engagementContent">
+                                <div class="text-center py-4">
+                                    <div class="loading-spinner"></div>
+                                    <p class="mt-2">Loading YouTube comments...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-3">
+                    <div class="d-flex flex-wrap justify-content-center gap-2">
+                        <a href="https://www.youtube.com/watch?v=${video.id}" target="_blank" class="pro-btn">
+                            <i class="fab fa-youtube me-2"></i>WATCH ON YOUTUBE
+                        </a>
+                        <button class="pro-btn pro-btn-outline" onclick="downloadAnalytics('${video.id}')">
+                            <i class="fas fa-download me-2"></i>EXPORT DATA
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('analyticsModalBody').innerHTML = analyticsContent;
+            
+            // Render professional charts
+            setTimeout(() => {
+                renderPerformanceChart(video, isMobile);
+                renderEngagementChart(video, isMobile);
+                loadAllComments(video.id);
+            }, 100);
+            
+            analyticsModal.show();
+        }
+
+        // Load all comments from YouTube (with pagination)
+        async function loadAllComments(videoId, nextPageToken = null) {
+            const engagementContent = document.getElementById('engagementContent');
+            
+            try {
+                // Fetch comments from YouTube API
+                const commentsData = await youtubeAPI('/commentThreads', {
+                    part: 'snippet,replies',
+                    videoId: videoId,
+                    maxResults: 100,
+                    order: 'relevance',
+                    pageToken: nextPageToken || ''
+                });
+
+                let commentsHTML = '';
+                
+                if (!nextPageToken) {
+                    // First load - show total comments count
+                    commentsHTML += `
+                        <div class="text-center mb-3 p-2" style="background: rgba(255, 0, 51, 0.1); border-radius: 8px;">
+                            <strong>${formatNumber(commentsData.pageInfo?.totalResults || 0)} Comments Found</strong>
+                        </div>
+                    `;
+                }
+                
+                if (commentsData.items && commentsData.items.length > 0) {
+                    commentsData.items.forEach(commentThread => {
+                        const comment = commentThread.snippet.topLevelComment.snippet;
+                        const publishedAt = new Date(comment.publishedAt);
+                        const timeAgo = getTimeAgo(publishedAt);
+                        
+                        // Main comment
+                        commentsHTML += `
+                            <div class="comment-item">
+                                <div class="comment-author">${comment.authorDisplayName}</div>
+                                <div class="comment-text">${comment.textDisplay}</div>
+                                <div class="comment-meta">
+                                    <span>${timeAgo}</span>
+                                    <div class="comment-likes">
+                                        <i class="fas fa-heart text-danger me-1"></i>
+                                        <span>${formatNumber(comment.likeCount)}</span>
+                                    </div>
+                                </div>
+                        `;
+                        
+                        // Show replies if available
+                        if (commentThread.replies && commentThread.replies.comments.length > 0) {
+                            commentsHTML += `<div class="comment-replies">`;
+                            commentThread.replies.comments.forEach(reply => {
+                                const replyData = reply.snippet;
+                                const replyTimeAgo = getTimeAgo(new Date(replyData.publishedAt));
+                                
+                                commentsHTML += `
+                                    <div class="reply-item">
+                                        <div class="comment-author">${replyData.authorDisplayName}</div>
+                                        <div class="comment-text">${replyData.textDisplay}</div>
+                                        <div class="comment-meta">
+                                            <span>${replyTimeAgo}</span>
+                                            <div class="comment-likes">
+                                                <i class="fas fa-heart text-danger me-1"></i>
+                                                <span>${formatNumber(replyData.likeCount)}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                            commentsHTML += `</div>`;
+                        }
+                        
+                        commentsHTML += `</div>`;
+                    });
+                    
+                    // Add load more button if there are more comments
+                    if (commentsData.nextPageToken) {
+                        commentNextPageTokens[videoId] = commentsData.nextPageToken;
+                        commentsHTML += `
+                            <button class="pro-btn pro-btn-outline load-more-btn" onclick="loadMoreComments('${videoId}')">
+                                <i class="fas fa-arrow-down me-2"></i>LOAD MORE COMMENTS
+                            </button>
+                        `;
+                    }
+                } else {
+                    commentsHTML = `
+                        <div class="text-center py-4">
+                            <i class="fas fa-comment-slash fa-2x mb-3 opacity-50"></i>
+                            <p>No comments available for this video</p>
+                        </div>
+                    `;
+                }
+                
+                if (nextPageToken) {
+                    // Append to existing content
+                    const existingContent = engagementContent.innerHTML;
+                    const withoutLoadMore = existingContent.replace(/<button class="pro-btn pro-btn-outline load-more-btn[\s\S]*?<\/button>/, '');
+                    engagementContent.innerHTML = withoutLoadMore + commentsHTML;
+                } else {
+                    // Replace content
+                    engagementContent.innerHTML = commentsHTML;
+                }
+                
+            } catch (error) {
+                console.error('Error fetching comments:', error);
+                engagementContent.innerHTML = `
+                    <div class="text-center py-4">
+                        <i class="fas fa-exclamation-triangle fa-2x mb-3 text-warning"></i>
+                        <p>Unable to load comments</p>
+                        <small class="text-muted">${error.message}</small>
+                    </div>
+                `;
+            }
+        }
+
+        // Load more comments
+        async function loadMoreComments(videoId) {
+            const nextPageToken = commentNextPageTokens[videoId];
+            if (nextPageToken) {
+                await loadAllComments(videoId, nextPageToken);
+            }
+        }
+
+        // Helper function to get time ago
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diffInSeconds = Math.floor((now - date) / 1000);
+            
+            if (diffInSeconds < 60) return 'Just now';
+            if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+            if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+            if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)} days ago`;
+            if (diffInSeconds < 31536000) return `${Math.floor(diffInSeconds / 2592000)} months ago`;
+            return `${Math.floor(diffInSeconds / 31536000)} years ago`;
+        }
+
+        // Download analytics (mock function)
+        function downloadAnalytics(videoId) {
+            alert('Professional analytics export started...\nThis would download a comprehensive PDF report in production.');
+        }
+
+        // Render performance chart
+        function renderPerformanceChart(video, isMobile = false) {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            
+            const maxValues = {
+                maxViews: Math.max(...videosData.map(v => v.views)),
+                maxLikes: Math.max(...videosData.map(v => v.likes)),
+                maxComments: Math.max(...videosData.map(v => v.comments))
+            };
+            
+            const viewsContribution = (video.views / maxValues.maxViews) * 50;
+            const likesContribution = (video.likes / maxValues.maxLikes) * 25;
+            const commentsContribution = (video.comments / maxValues.maxComments) * 25;
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Views (50%)', 'Likes (25%)', 'Comments (25%)'],
+                    datasets: [{
+                        data: [viewsContribution, likesContribution, commentsContribution],
+                        backgroundColor: [
+                            'rgba(255, 0, 51, 0.8)',
+                            'rgba(255, 215, 0, 0.8)',
+                            'rgba(255, 255, 255, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 0, 51, 1)',
+                            'rgba(255, 215, 0, 1)',
+                            'rgba(255, 255, 255, 1)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: isMobile ? 'bottom' : 'right',
+                            labels: { 
+                                color: 'white',
+                                font: {
+                                    size: isMobile ? 10 : 12
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Render engagement chart
+        function renderEngagementChart(video, isMobile = false) {
+            const ctx = document.getElementById('engagementChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Views', 'Likes', 'Comments'],
+                    datasets: [{
+                        label: 'Count',
+                        data: [video.views, video.likes, video.comments],
+                        backgroundColor: 'rgba(255, 0, 51, 0.8)',
+                        borderColor: 'rgba(255, 0, 51, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { 
+                                color: 'white',
+                                callback: function(value) {
+                                    return formatNumber(value);
+                                },
+                                font: {
+                                    size: isMobile ? 10 : 12
+                                }
+                            }
+                        },
+                        x: {
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { 
+                                color: 'white',
+                                font: {
+                                    size: isMobile ? 10 : 12
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { 
+                            display: false 
+                        }
+                    }
+                }
+            });
+        }
+
+        // Calculate professional scores
+        function calculateScores() {
+            if (videosData.length === 0) return;
+            
+            const maxValues = {
+                maxViews: Math.max(...videosData.map(v => v.views)),
+                maxLikes: Math.max(...videosData.map(v => v.likes)),
+                maxComments: Math.max(...videosData.map(v => v.comments))
+            };
+            
+            videosData.forEach(video => {
+                const normalizedViews = maxValues.maxViews > 0 ? (video.views / maxValues.maxViews) * 100 : 0;
+                const normalizedLikes = maxValues.maxLikes > 0 ? (video.likes / maxValues.maxLikes) * 100 : 0;
+                const normalizedComments = maxValues.maxComments > 0 ? (video.comments / maxValues.maxComments) * 100 : 0;
+                
+                video.score = (normalizedViews * 0.5) + (normalizedLikes * 0.25) + (normalizedComments * 0.25);
+                video.score = Math.round(video.score * 10) / 10;
+            });
+            
+            videosData.sort((a, b) => b.score - a.score);
+        }
+
+        // Handle search
+        function handleSearch() {
+            currentPage = 1; // Reset to first page when search changes
+            applyFilters();
+        }
+
+        // Handle sorting
+        function handleSort() {
+            const sortBy = document.getElementById('sortSelect').value;
+            
+            filteredVideos.sort((a, b) => {
+                switch (sortBy) {
+                    case 'views': return b.views - a.views;
+                    case 'likes': return b.likes - a.likes;
+                    case 'comments': return b.comments - a.comments;
+                    case 'engagement': return b.engagementRate - a.engagementRate;
+                    case 'date': return new Date(b.publishedAt) - new Date(a.publishedAt);
+                    default: return b.score - a.score;
+                }
+            });
+            
+            updatePagination();
+        }
+
+        // Apply filters
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            let tempVideos = [...videosData];
+            switch (currentFilter) {
+                case 'top3': tempVideos = videosData.slice(0, 3); break;
+                case 'high-engagement': 
+                    const avgEngagement = videosData.reduce((sum, vid) => sum + vid.engagementRate, 0) / videosData.length;
+                    tempVideos = videosData.filter(v => v.engagementRate > avgEngagement);
+                    break;
+                case 'recent': 
+                    tempVideos = [...videosData].sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)).slice(0, 10);
+                    break;
+                case 'trending':
+                    const oneWeekAgo = new Date();
+                    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+                    tempVideos = videosData.filter(v => new Date(v.publishedAt) > oneWeekAgo);
+                    break;
+            }
+            
+            if (searchTerm) {
+                filteredVideos = tempVideos.filter(video => video.title.toLowerCase().includes(searchTerm));
+            } else {
+                filteredVideos = tempVideos;
+            }
+            
+            handleSort();
+            
+            if (!searchTerm && currentFilter === 'all') {
+                renderTopVideos();
+            }
+        }
+
+        // Render Top 3 Videos
+        function renderTopVideos() {
+            const topVideosContainer = document.getElementById('topVideos');
+            if (!topVideosContainer) return;
+
+            if (videosData.length === 0) {
+                topVideosContainer.innerHTML = '<div class="col-12 text-center py-5"><h4>No professional dance challenges found</h4></div>';
+                return;
+            }
+
+            const top3 = videosData.slice(0, 3);
+            const medals = ['gold', 'silver', 'bronze'];
+            
+            let html = '';
+            top3.forEach((video, index) => {
+                html += `
+                    <div class="winner-card ${medals[index]}" onclick="showVideoAnalytics('${video.id}')">
+                        <div class="winner-badge ${medals[index]}">${index + 1}</div>
+                        <h5 class="mb-3">${video.title}</h5>
+                        <div class="winner-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">${formatNumber(video.views)}</div>
+                                <div class="stat-label">Views</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${formatNumber(video.likes)}</div>
+                                <div class="stat-label">Likes</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${formatNumber(video.comments)}</div>
+                                <div class="stat-label">Comments</div>
+                            </div>
+                        </div>
+                        <div class="pro-btn">PRO SCORE: ${video.score}</div>
+                    </div>
+                `;
+            });
+
+            topVideosContainer.innerHTML = html;
+        }
+
+        // Update pagination
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredVideos.length / videosPerPage);
+            const startIndex = (currentPage - 1) * videosPerPage;
+            const endIndex = Math.min(startIndex + videosPerPage, filteredVideos.length);
+            
+            // Update page info
+            document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+            
+            // Update button states
+            document.getElementById('prevPageBtn').disabled = currentPage === 1;
+            document.getElementById('nextPageBtn').disabled = currentPage === totalPages || totalPages === 0;
+            
+            // Render current page
+            renderCurrentPage();
+        }
+
+        // Render current page of videos
+        function renderCurrentPage() {
+            const tableBody = document.getElementById('allVideosTable');
+            if (!tableBody) return;
+
+            if (filteredVideos.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="8" class="text-center py-4">No professional videos match criteria</td></tr>';
+                return;
+            }
+
+            const startIndex = (currentPage - 1) * videosPerPage;
+            const endIndex = Math.min(startIndex + videosPerPage, filteredVideos.length);
+            const currentVideos = filteredVideos.slice(startIndex, endIndex);
+
+            let html = '';
+            currentVideos.forEach((video, index) => {
+                const globalIndex = startIndex + index;
+                const originalRank = videosData.findIndex(v => v.id === video.id) + 1;
+                
+                html += `
+                    <tr>
+                        <td class="rank-cell" data-label="Rank">${originalRank}</td>
+                        <td data-label="Video Title">${video.title}</td>
+                        <td data-label="Views">${formatNumber(video.views)}</td>
+                        <td data-label="Likes">${formatNumber(video.likes)}</td>
+                        <td data-label="Comments">${formatNumber(video.comments)}</td>
+                        <td data-label="Engagement">${video.engagementRate}%</td>
+                        <td class="score-cell" data-label="Score">${video.score}</td>
+                        <td data-label="Actions">
+                            <button class="pro-btn pro-btn-outline btn-sm" onclick="showVideoAnalytics('${video.id}')">
+                                <i class="fas fa-chart-bar me-1"></i>ANALYZE
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tableBody.innerHTML = html;
+
+            // Make table responsive if on mobile
+            if (window.innerWidth <= 768) {
+                makeTableResponsive();
+            }
+        }
+
+        // Go to previous page
+        function goToPrevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                updatePagination();
+            }
+        }
+
+        // Go to next page
+        function goToNextPage() {
+            const totalPages = Math.ceil(filteredVideos.length / videosPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                updatePagination();
+            }
+        }
+
+        // UI State Management
+        function showLoadingState() {
+            document.getElementById('loadingState').style.display = 'block';
+            document.getElementById('dashboardContent').style.display = 'none';
+            document.getElementById('errorState').style.display = 'none';
+        }
+
+        function showDashboardContent() {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('dashboardContent').style.display = 'block';
+            document.getElementById('errorState').style.display = 'none';
+        }
+
+        function showError(message) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('dashboardContent').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+            document.getElementById('errorMessage').textContent = message;
+        }
+
+        // Format number
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num.toString();
+        }
+
+        // Countdown timer
+        function startCountdown() {
+            function updateCountdown() {
+                const now = new Date();
+                const timeRemaining = COMPETITION_END - now;
+                
+                if (timeRemaining <= 0) {
+                    ['days', 'hours', 'minutes', 'seconds'].forEach(id => {
+                        document.getElementById(id).textContent = '00';
+                    });
+                    return;
+                }
+                
+                const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+                
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            }
+            
+            updateCountdown();
+            countdownInterval = setInterval(updateCountdown, 1000);
+        }
+
+        console.log('PRO Dance Challenge Dashboard Loaded');
+    </script>
+</body>
+</html>
